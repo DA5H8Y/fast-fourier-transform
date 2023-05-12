@@ -1,0 +1,134 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Generate Project (Native Windows)",
+            "type": "shell",
+            "command": "${workspaceFolder}/build/premake5.exe",
+            "args": [
+                "--file=${workspaceFolder}/build/premake5.lua",
+                "vs2019"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        },
+        {
+            "label": "Generate Project (Native Linux)",
+            "command": "premake",
+            "args": [
+                "--file=${workspaceFolder}/build/premake5.lua",
+                "gmake"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        },        {
+            "label": "Generate Project (Cross Windows)",
+            "type": "shell",
+            "command": "premake",
+            "args": [
+                "--os=windows",
+                "--file=${workspaceFolder}/build/premake5.lua",
+                "gmake"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        },
+        {
+            "label": "Generate Project (Cross Linux)",
+            "command": "${workspaceFolder}/build/premake.exe",
+            "args": [
+                "--os=linux",
+                "--file=${workspaceFolder}/build/premake5.lua",
+                "vs2019"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        },
+        {
+            "label": "Build Linux (Release)",
+            "group": "build",
+            "command": "make",
+            "args": ["config=release_x64"],
+            "linux":{
+                "options": {
+                    "cwd": "${workspaceFolder}/build/gmake"
+                }
+            }
+        },
+        {
+            "label": "Build Linux (Debug)",
+            "group": "build",
+            "command": "make",
+            "args": ["config=debug_x64"],
+            "linux":{
+                "options": {
+                    "cwd": "${workspaceFolder}/build/gmake"
+                }
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Build (Windows Debug)",
+            "command": "cmd.exe",
+            "dependsOn": [
+                "Generate Project"
+            ],
+            "args": [
+                "/C",
+                "msbuild.exe",
+                "${workspaceFolder}/build/vs2019/XcaliburClients.sln",
+                "/p:configuration=Debug;platform=x64"
+            ],
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": "build",
+            "options": {
+                "shell": {
+                    "executable": "cmd.exe",
+                    "args": [
+                        "/C",
+                        "\"C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/Tools/VsDevCmd.bat\"",
+                        "&&"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Build (Windows Release)",
+            "command": "cmd.exe",
+            "dependsOn": [
+                "Generate Project"
+            ],
+            "args": [
+                "/C",
+                "msbuild.exe",
+                "${workspaceFolder}/build/vs2019/XcaliburClients.sln",
+                "/p:configuration=Release;platform=x64"
+            ],
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": "build",
+            "options": {
+                "shell": {
+                    "executable": "cmd.exe",
+                    "args": [
+                        "/C",
+                        "\"C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/Tools/VsDevCmd.bat\"",
+                        "&&"
+                    ]
+                }
+            }
+        }
+    ]
+}

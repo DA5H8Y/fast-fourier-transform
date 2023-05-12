@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Debug",
+            "type":"cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/WaveFileAnalysis_d",
+            "args": [ "${workspaceFolder}/WaveFiles" ],
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Run",
+            "type":"cppdbg",
+            "request":"launch",
+            "program": "${workspaceFolder}/bin/WaveFileAnalysis",
+            "args": [ "${workspaceFolder}/WaveFiles" ],
+            "cwd": "${workspaceFolder}"
+        }
+    ],
+    "version": "2.0.0"
+}

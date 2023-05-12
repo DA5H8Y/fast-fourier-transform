@@ -1,0 +1,37 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/src/",
+                "R:/Tools/jsoncpp/include/**",
+                "R:/Tools/jsoncpp/src/lib_json/**",
+                "R:/Tools/plog/include/**"
+            ],
+            "defines": [
+                "_WINSOCK_DEPRECATED_NO_WARNINGS",
+                "WIN32",
+                "WIN64",
+                "_WINDOWS",
+                "_MBCS"
+            ],
+            "windowsSdkVersion": "10.0.19041.0",
+            "cStandard": "c17",
+            "cppStandard": "c++20",
+            "compilerPath": "cl.exe"
+        },
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/src/",
+                "/r/Tools/jsoncpp/include/**",
+                "/r/Tools/jsoncpp/src/lib_json/**",
+                "/r/Tools/plog/include/**"
+            ],
+            "cStandard": "c17",
+            "cppStandard": "c++20",
+            "compilerPath": "/usr/bin/gcc"
+        }
+    ],
+    "version": 4
+}
