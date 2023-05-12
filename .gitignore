@@ -2,3 +2,5 @@
 /WaveGen.exe
 /obj
 /bin
+/build/*
+Results.csv
