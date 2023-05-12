@@ -2,25 +2,14 @@
 #include <vector>
 #include <istream>
 
-template<class T>
-T get_as( std::string& s )
-{
-    std::stringstream convert(s);
-
-    T value;
-    convert >> value;
-    return value;
-}
-
-template <typename T>
 class CSVParser
 {
- using record = std::vector<T>;
+ using record = std::vector<double>;
  public:
    CSVParser(const std::string& filename, bool hasColumnNames = true);
    std::vector<std::string> getColumnNames() const;
-   int getNumberOfRecords() { return _dataCollection.size(); };
-   int getNumberOfDataEntries() { return getRecord(1).size(); };
+   int getNumberOfRecords() const { return _dataCollection.size(); };
+   int getNumberOfDataEntries() const { return getRecord(1).size(); };
 
    std::vector<record> getDataCollection() const { return _dataCollection; };
    bool addDataCollection(std::vector<record>, const int idx = 0);
@@ -32,12 +21,12 @@ class CSVParser
    bool insertRecord(record, const unsigned int idx = 0);
    bool replaceRecord(record, const unsigned int idx = 0);
 
-   T getEntry(const unsigned int idx, const unsigned int colIdx) const;
-   T getEntry(const unsigned int idx, const std::string& colName) const;
-   const std::vector<T> getAllEntries(const unsigned int colIdx) const;
-   const std::vector<T> getAllEntries(const std::string& colName) const;
-   bool replaceEntry(T, const unsigned int idx = 0, const unsigned int colIdx = 0);
-   bool replaceEntry(T, const unsigned int idx = 0, const std::string& colName = "");
+   double getEntry(const unsigned int idx, const unsigned int colIdx) const;
+   double getEntry(const unsigned int idx, const std::string& colName) const;
+   const std::vector<double> getAllEntries(const unsigned int colIdx) const;
+   const std::vector<double> getAllEntries(const std::string& colName) const;
+   bool replaceEntry(double, const unsigned int idx = 0, const unsigned int colIdx = 0);
+   bool replaceEntry(double, const unsigned int idx = 0, const std::string& colName = "");
 
  private:
    std::vector<std::vector<std::string>> _rawDataCollection;
@@ -49,7 +38,7 @@ class CSVParser
    std::vector<std::string> readCSVRow(const std::string &row);
    std::vector<std::vector<std::string>> readCSV(std::istream &in);
    bool convertFromRaw();
-
+   double get_as( std::string& s );
    bool saveCSVFile();
 
    enum class CSVState {

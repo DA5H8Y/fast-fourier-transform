@@ -3,29 +3,39 @@
 #include <istream>
 #include <algorithm>
 #include <filesystem>
+#include <stdexcept>
 #include "CSVParser.hpp"
 
-template<typename T>
-CSVParser<T>::CSVParser(const std::string& fName, bool hasColumnNames) :
+CSVParser::CSVParser(const std::string& fName, bool hasColumnNames) :
   _fName(fName),
   _hasColumnNames(hasColumnNames)
 {
     if (std::filesystem::exists(_fName))
     {
-        _rawDataCollection = readCSV();
+        std::ifstream file(_fName, std::ios_base::in);
+        _rawDataCollection = readCSV(file);
         convertFromRaw();
+        file.close();
     }
     else
     {
         std::stringstream msg("");
         msg << "The file: " << _fName << " does not exist." << std::endl;
-        throw std::exception(msg);
+        throw std::invalid_argument(msg.str().c_str());
     }
 
 }
 
-template<typename T>
-bool CSVParser<T>::convertFromRaw()
+double CSVParser::get_as( std::string& s )
+{
+    std::stringstream convert(s);
+
+    double value;
+    convert >> value;
+    return value;
+}
+
+bool CSVParser::convertFromRaw()
 {
     bool success = true;
 
@@ -34,7 +44,7 @@ bool CSVParser<T>::convertFromRaw()
     if (_hasColumnNames)
     {
         _columnNames = _rawDataCollection[idx];
-        idx;
+        idx++;
     }
 
     for(;idx<_rawDataCollection.size();idx++)
@@ -43,7 +53,7 @@ bool CSVParser<T>::convertFromRaw()
         record row;
         for(int j=0;j<rawRow.size();j++)
         {
-            row.push_back(get_as<T>(rawRow[j]));
+            row.push_back(get_as(rawRow[j]));
         }
         _dataCollection.push_back(row);
     }
@@ -52,8 +62,7 @@ bool CSVParser<T>::convertFromRaw()
     return true;
 }
 
-template<typename T>
-std::vector<std::string> CSVParser<T>::readCSVRow(const std::string &row) {
+std::vector<std::string> CSVParser::readCSVRow(const std::string &row) {
     CSVState state = CSVState::UnquotedField;
     std::vector<std::string> fields {""};
     size_t i = 0; // index of the current field
@@ -95,8 +104,7 @@ std::vector<std::string> CSVParser<T>::readCSVRow(const std::string &row) {
     return fields;
 }
 
-template<typename T>
-std::vector<std::vector<std::string>> CSVParser<T>::readCSV(std::istream &in) {
+std::vector<std::vector<std::string>> CSVParser::readCSV(std::istream &in) {
     std::vector<std::vector<std::string>> table;
     std::string row;
     while (!in.eof()) {
@@ -110,12 +118,11 @@ std::vector<std::vector<std::string>> CSVParser<T>::readCSV(std::istream &in) {
     return table;
 }
 
-template<typename T>
-std::vector<T> CSVParser<T>::getRecord(const unsigned int idx) const
+std::vector<double> CSVParser::getRecord(const unsigned int idx) const
 {
     if (idx >= getNumberOfRecords() )
     {
-        throw std::exception("Index exceeds number of records.");
+        throw std::invalid_argument("Index exceeds number of records.");
     }
     else
     {
@@ -124,28 +131,27 @@ std::vector<T> CSVParser<T>::getRecord(const unsigned int idx) const
     
 }
 
-template<typename T>
-T CSVParser<T>::getEntry(const unsigned int idx, const unsigned int colIdx) const
+double CSVParser::getEntry(const unsigned int idx, const unsigned int colIdx) const
 {
     if (idx >= getNumberOfRecords() )
     {
-        throw std::exception("Index exceeds number of records.");
+        throw std::invalid_argument("Index exceeds number of records.");
     }
     
     if (colIdx >= getNumberOfDataEntries() )
     {
-        throw std::exception("Index exceeds number of data entries.");
+        throw std::invalid_argument("Index exceeds number of data entries.");
     }
     
     return _dataCollection[idx][colIdx];
 }
 
-template<typename T>
-const std::vector<T> CSVParser<T>::getAllEntries(const std::string& colName) const
+const std::vector<double> CSVParser::getAllEntries(const std::string& colName) const
 {
     auto maxIt = std::find(_columnNames.begin(), _columnNames.end(), colName);
-    unsigned int idx = maxIt - _columnNames.begin();
-    std::vector<T> data;
+    unsigned int idx = (maxIt - _columnNames.begin());
+    ( idx == 0 ) ? (idx = idx) : (idx = idx - 1);
+    std::vector<double> data;
     for (int i=0; i<getNumberOfRecords(); i++)
     {
         data.push_back(getEntry(i, idx));

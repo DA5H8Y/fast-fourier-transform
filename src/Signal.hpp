@@ -1,23 +1,23 @@
 #include <vector>
 #include <complex>
 
-template <typename T> 
 class Signal
 {
  public:
-   Signal(const std::vector<T>& t, const std::vector<T>& X);
-   T getMaxFrequency() const { return _maxFrequency; }
- private:
-   std::vector<T> _T;
-   std::vector<T> _X;
-   std::vector<std::complex<T>> _Y;
-   std::vector<T> _P2;
-   std::vector<T> _P1;    
-   std::vector<T> _f;
+   Signal(const std::vector<double>& t, const std::vector<double>& X);
+   double getMaxFrequency() const { return _maxFrequency; }
 
-   T _Fs;
-   T _maxFrequency;
-   int _L;
+ private:
+   std::vector<double> _T;
+   std::vector<double> _X;
+   std::vector<std::complex<double>> _Y;
+   std::vector<double> _P2;
+   std::vector<double> _P1;    
+   std::vector<double> _f;
+
+   double _Fs;
+   double _maxFrequency;
+   double _L;
 
    /* FFT(X) is the discrete Fourier transform (DFT) of vector X.
       For length N input vector x, the DFT is a length N vector X,
